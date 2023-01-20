@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kinosite</title>
+    <link rel="shortcut icon" href="img/icons/video-solid.svg" type="image/x-icon">
+    <!-- Шрифти -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- Іконки-->
+    <script src="https://kit.fontawesome.com/d5edb95c4a.js" crossorigin="anonymous"></script>
+    <!-------------------------------->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <header data-value="header" class="header">
+            <div class="header__container container">
+                <div class="header__content">
+                    <a href="index.html" class="header__title fa-solid fa-video">kinosite</a>
+                    <form class="header__search">
+                        <input type="search" class="header__input" placeholder="Шукати">
+                        <button class="header__submit fa-solid fa-magnifying-glass" type="submit"></button>
+                    </form>
+                </div>
+            </div>
+        </header>
+        <main class="main">
+            <div class="main__container container">
+                <h1 class="main__title">Каталог Фільмів (Топ-250)</h1>
+                <div class="main__movies">
+
+                </div>
+                <div class="modal">
+                </div>
+            </div>
+            <div class="preloader">
+            </div>
+        </main>
+        <div class="pagination">
+            <div class="container">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
