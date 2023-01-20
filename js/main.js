@@ -6,7 +6,6 @@ const SEARCH__FILM = 'https://kinopoiskapiunofficial.tech/api/v2.2/films/'
 const searchForm = document.querySelector('.header__search')
 //Каталог фільмів
 let movieList = document.querySelector('.main__movies')
-
 //Масив пагінацій
 const paginationList = document.querySelector('.pagination')
 let currentValue
@@ -15,27 +14,18 @@ let paginationNode
 const preloader = document.querySelector('.preloader')
 
 const modal = document.querySelector('.modal')
-// Якщо False то Активний клас ставиться на 1 сторінку, True на інші
-let active = false 
 
+const error = document.querySelector('#error')
 searchForm.addEventListener('submit', (e) => searchFilm(e))
 //Події Закривання модалки
 window.addEventListener('click', (e) => {
     const modalBtn = document.querySelector('.modal__button-close')
-    if (e.target === modalBtn) {
-        closeModal()
-    }
-    if (e.target === modal) {
-        closeModal()
-    }
-    if (e.key === 'Escape') {
-        closeModal()
-    }
+    if (e.target === modalBtn) closeModal()
+    if (e.target === modal) closeModal()
+    if (e.key === 'Escape') closeModal()
 })
 window.addEventListener('keydown', (e) => {
-    if (e.keyCode === 27) {
-        closeModal()
-    }
+    if (e.keyCode === 27) closeModal()
 })
 
 
@@ -45,32 +35,28 @@ function renderPagination(e) {
     if (e) {
         e.preventDefault()
         currentValue = parseFloat(e.target.dataset.value)
-        if (currentValue > lastPage || currentValue < 1) {
-            return 
-        }
-    } else {
+
+        if (currentValue > lastPage || currentValue < 1) return
+    }
+    else {
         currentValue = 1
     }
     const paginatonHtml = `
                         <li class=" page-item"><a class="page-link page-previous" data-value="${currentValue - 1}" href="#">Previous</a></li>
-                        <li class="page-item page-item-cd  ${currentValue === lastPage? 'page-item__points': 'hidden'}"><a class="page-link" data-value="1" href="#">${currentValue === lastPage? '1' : ''}</a></li>
-                        <li class="page-item ${currentValue === 1? 'hidden': ''}"><a class="page-link" data-value="${currentValue - 1}" href="#">${currentValue - 1}</a></li>
+                        <li class="page-item page-item-cd  ${currentValue === lastPage ? 'page-item__points' : 'hidden'}"><a class="page-link" data-value="1" href="#">${currentValue === lastPage ? '1' : ''}</a></li>
+                        <li class="page-item ${currentValue === 1 ? 'hidden' : ''}"><a class="page-link" data-value="${currentValue - 1}" href="#">${currentValue - 1}</a></li>
                         <li class="page-item"><a class="page-link page__link--active" data-value="${currentValue}" href="#">${currentValue}</a></li>
-                        <li class="page-item ${currentValue === beforeLastPage? '' :'page-item__points'} ${currentValue !== lastPage? currentValue + 1: 'hidden'}"><a class="page-link" data-value="${currentValue + 1}" href="#">${currentValue + 1}</a></li>
-                        <li class="page-item page-item-cd"><a class="page-link" data-value="13" href="#">${currentValue >= beforeLastPage? '' : lastPage}</a></li>
+                        <li class="page-item ${currentValue === beforeLastPage ? '' : 'page-item__points'} ${currentValue !== lastPage ? currentValue + 1 : 'hidden'}"><a class="page-link" data-value="${currentValue + 1}" href="#">${currentValue + 1}</a></li>
+                        <li class="page-item page-item-cd"><a class="page-link" data-value="13" href="#">${currentValue >= beforeLastPage ? '' : lastPage}</a></li>
                         <li class="page-item"><a class="page-link page-next" data-value="${currentValue + 1}" href="#">Next</a></li>
         `
     paginationList.innerHTML = paginatonHtml
-    let x  = document.querySelector(`[data-value="${currentValue}"]`)
-    x.classList.add('page__link--active')
-    active = true
+    document.querySelector(`[data-value="${currentValue}"]`).classList.add('page__link--active')
     paginationNode = document.querySelectorAll('.page-link')
-    paginationNode.forEach((item) => item.addEventListener('click', (e) => {
-        renderPagination(e)
-    }))
+    paginationNode.forEach((item) => item.addEventListener('click', e => renderPagination(e)))
     clearMovie()
     renderPreloader()
-    !e?getMovies(TOP_URL1 + 1) : getMovies(TOP_URL1 + currentValue)
+    !e ? getMovies(TOP_URL1 + 1) : getMovies(TOP_URL1 + currentValue)
 }
 
 async function getMovies(url) {
@@ -84,11 +70,12 @@ async function getMovies(url) {
     }).then((resp) => resp.json()).then((json) => {
         clearPreloader()
         renderMovies(json)
-    })
+    }).catch(() => renderError())
 }
 function searchFilm(e) {
     e.preventDefault()
     const searchInput = document.querySelector('.header__input')
+    clearPagination()
     clearMovie()
     renderPreloader()
     getMovies(`https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=${searchInput.value}`)
@@ -118,7 +105,7 @@ function renderMovies(movies) {
 function renderPreloader() {
     let preloaderHtml = `
     <div class="preloader__container">
-        <img class="preloader__img" src="img/Rolling-1.6s-216px.svg" alt="">  
+        <img class="preloader__gif" src="img/preloader.gif" alt="">  
      </div>
     `
     preloader.innerHTML = preloaderHtml
@@ -136,7 +123,7 @@ async function openModal(id) {
             'X-API-KEY': 'b38e3f31-4f77-470e-89af-8847c7ca24ca',
             'Content-Type': 'application/json',
         },
-    }).then((resp) => resp.json()).then((movie) => renderModal(movie))
+    }).then((resp) => resp.json()).then((movie) => renderModal(movie)).catch(()=> renderError())
 }
 function renderModal(movie) {
     console.log(movie);
@@ -166,6 +153,15 @@ function closeModal() {
     modal.innerHTML = ''
     document.body.classList.remove('stop-scrolling')
     modal.classList.remove('modal--show')
+}
+function clearPagination() {
+    paginationList.innerHTML = ''
+}
+function renderError() {
+    error.innerHTML = `
+    <img class="error__gif" src="img/error.gif" alt="">
+    `
+    error.classList.add('error')
 }
 renderPagination()
 renderPreloader()
