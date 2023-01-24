@@ -17,7 +17,6 @@ const modal = document.querySelector('.modal')
 
 const error = document.querySelector('#error')
 searchForm.addEventListener('submit', (e) => searchFilm(e))
-//Події Закривання модалки
 window.addEventListener('click', (e) => {
     const modalBtn = document.querySelector('.modal__button-close')
     if (e.target === modalBtn) closeModal()
@@ -89,15 +88,21 @@ function renderMovies(movies) {
         movie.innerHTML = `
             <img class="movie__img" src="${element.posterUrl}" alt="banner">
             <div class="main__movie-bottom">
+                <button class="main__movie-trailer" data-id='${element.filmId}'>Трейлер</button>
                 <div class="main__movie-title title">
                     ${element.nameRu}
                 </div>
                 <p class="main__movie-type">${element.genres.map((genre) => ` ${genre.genre}`)}</p>
             </div>
         `
-        movie.addEventListener('click', () => {
-            document.body.classList.add('stop-scrolling')
-            openModal(element.filmId)
+        movie.addEventListener('click', (e) => {
+            if (e.target.classList.contains('movie__img') || e.target.classList.contains('main__movie-title')) {
+                document.body.classList.add('stop-scrolling')
+                openModal(element.filmId)
+            }
+            if (e.target.classList.contains('main__movie-trailer')) {
+                getTrailer(e.target.dataset.id)
+            }
         })
         movieList.append(movie)
     });
@@ -117,16 +122,16 @@ function clearMovie() {
     movieList.innerHTML = ''
 }
 async function openModal(id) {
+    console.log(id);
     const resp = await fetch(SEARCH__FILM + id, {
         method: 'GET',
         headers: {
             'X-API-KEY': 'b38e3f31-4f77-470e-89af-8847c7ca24ca',
             'Content-Type': 'application/json',
         },
-    }).then((resp) => resp.json()).then((movie) => renderModal(movie)).catch(()=> renderError())
+    }).then((resp) => resp.json()).then((movie) => renderModal(movie)).catch(() => renderError())
 }
 function renderModal(movie) {
-    console.log(movie);
     const modalHtml = `
                     <div class="modal__card ">
                         <img class="modal__movie-backdrop" src="${movie.posterUrl}" alt="">
@@ -162,6 +167,36 @@ function renderError() {
     <img class="error__gif" src="img/error.gif" alt="">
     `
     error.classList.add('error')
+}
+function openTrailer(list) {
+    console.log(list);
+    const links = list.items.filter((item) => item.site === 'YOUTUBE' && item.url.indexOf('/v/')? item.url : '')
+    const url = links[0].url //https://www.youtube.com/watch?v=mccs8Ql8m8o
+    let urlWatch = url.replace('v/', 'embed/')
+    if (url.indexOf('/watch?v=') !== -1) {
+        urlWatch = url.replace('/watch?v=', '/embed/')
+    }
+    console.log(urlWatch);
+    const modalHtml = `
+                     <div class="modal__card ">
+                        <iframe width="560" height="315" src="${urlWatch}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                     </div>
+                     `
+    modal.innerHTML = modalHtml
+    modal.classList.add('modal--show')
+
+}
+function getTrailer(id) {
+    fetch(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/videos`, {
+        method: 'GET',
+        headers: {
+            'X-API-KEY': 'a92ef8d8-1062-46bd-b32e-49f7b179258b',
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(res => res.json())
+        .then(json => openTrailer(json))
+        .catch(err => console.log(err))
 }
 renderPagination()
 renderPreloader()

@@ -232,7 +232,7 @@ body {
 }
 
 .movie__img {
-    width: 200px;
+    width: 100%;
     height: 300px;
     cursor: pointer;
     position: relative;
@@ -241,6 +241,18 @@ body {
 .main__movie-bottom {
     margin-top: 5px;
     max-width: 100%;
+}
+.main__movie-trailer{
+    margin-top: -8px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    width: 100%;
+    cursor: pointer;
+    background-color: yellow;
+    padding: 10px;
+}
+.main__movie-trailer:hover{
+    background-color: rgb(200, 200, 3);
 }
 
 .main__movie-title {
