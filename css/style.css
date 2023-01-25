@@ -325,7 +325,7 @@ body {
 }
 
 .modal__card {
-    max-width: 600px;
+    width: 60%;
     padding: 16px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
     background-color: #1a191f;
@@ -362,6 +362,11 @@ ul li {
     height: 100%;
     overflow: hidden;
 }
+@media (max-width: 767px) {
+    .stop-scrolling {
+        position: fixed;
+    }
+ }
 
 .error {
     position: fixed;

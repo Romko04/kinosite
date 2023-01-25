@@ -101,6 +101,7 @@ function renderMovies(movies) {
                 openModal(element.filmId)
             }
             if (e.target.classList.contains('main__movie-trailer')) {
+                document.body.classList.add('stop-scrolling')
                 getTrailer(e.target.dataset.id)
             }
         })
@@ -169,17 +170,27 @@ function renderError() {
     error.classList.add('error')
 }
 function openTrailer(list) {
-    console.log(list);
-    const links = list.items.filter((item) => item.site === 'YOUTUBE' && item.url.indexOf('/v/')? item.url : '')
-    const url = links[0].url //https://www.youtube.com/watch?v=mccs8Ql8m8o
-    let urlWatch = url.replace('v/', 'embed/')
-    if (url.indexOf('/watch?v=') !== -1) {
-        urlWatch = url.replace('/watch?v=', '/embed/')
+    const links = list.items.filter((item) => item.site === 'YOUTUBE' ? item.url : '')
+    //https://www.youtube.com/watch?v=mccs8Ql8m8o
+    let url = ''
+    let urlWatch = ''
+    if (links.length > 0) {
+        url = links[0].url
+        if (url.indexOf('/v/') !== -1) {
+            urlWatch = url.replace('v/', 'embed/')
+        }
+        if (url.indexOf('youtu.be') !== -1) {
+            urlWatch = url.replace('youtu.be/', 'youtube.com/embed/')
+        }
+        if (url.indexOf('/watch?v=') !== -1) {
+            urlWatch = url.replace('/watch?v=', '/embed/')
+        }
     }
     console.log(urlWatch);
     const modalHtml = `
                      <div class="modal__card ">
-                        <iframe width="560" height="315" src="${urlWatch}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        ${urlWatch ? `<iframe width="100%" height="500px" src="${urlWatch}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>` : '<iframe width="100%" height="500px" src="https://youtube.com/embed/YCHaVv72CN4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'} 
+                        <button type="button" class="modal__button-close">Закрыть</button>
                      </div>
                      `
     modal.innerHTML = modalHtml
