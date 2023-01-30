@@ -23,6 +23,8 @@ window.addEventListener('click', (e) => {
     if (e.target === modalBtn) closeModal()
     if (e.target === modal) closeModal()
     if (e.key === 'Escape') closeModal()
+    debugger
+    e.target.classList.contains('movie__img' || 'main__movie-title')? alert('he') : ''
 })
 window.addEventListener('keydown', (e) => {
     if (e.keyCode === 27) closeModal()
@@ -95,10 +97,6 @@ function renderMovies(movies) {
                 <p class="main__movie-type">${element.genres.map((genre) => ` ${genre.genre}`)}</p>
             </div>
         `
-        movie.addEventListener('click', () => {
-            document.body.classList.add('stop-scrolling')
-            openModal(element.filmId)
-        })
         movieList.append(movie)
     });
 }
