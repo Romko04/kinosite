@@ -139,7 +139,7 @@ function renderModal(movie) {
     console.log(movie);
     const modalHtml = `
                     <div class="modal__card ">
-                        <div class="fa-solid fa-xmark modal__movie-close-icon"></div>
+                        <button class="fa-solid fa-xmark modal__movie-close-icon"></button>
                         <img class="modal__movie-backdrop" src="${movie.posterUrl}" alt="">
                         <h2>
                             <span class="modal__movie-title">${movie.nameRu}</span>
