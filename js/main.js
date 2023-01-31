@@ -20,11 +20,25 @@ searchForm.addEventListener('submit', (e) => searchFilm(e))
 //Події Закривання модалки
 window.addEventListener('click', (e) => {
     const modalBtn = document.querySelector('.modal__button-close')
-    if (e.target === modalBtn) closeModal()
-    if (e.target === modal) closeModal()
+    switch (e.target) {
+        case modalBtn:
+            closeModal()
+            break;
+        case modal:
+            closeModal()
+            break
+        default:
+            break;
+    }
+    if (e.target.classList.contains('modal__movie-close-icon')) {
+        closeModal()
+    }
     if (e.key === 'Escape') closeModal()
-    debugger
-    e.target.classList.contains('movie__img' || 'main__movie-title')? alert('he') : ''
+    if (e.target.classList.contains('movie__img') || e.target.classList.contains('main__movie-title')) {
+        openModal(e.target.dataset.value)
+        document.body.classList.add('stop-scrolling')
+    }
+    if (e.target.classList.contains('page-link')) renderPagination(e)
 })
 window.addEventListener('keydown', (e) => {
     if (e.keyCode === 27) closeModal()
@@ -44,18 +58,16 @@ function renderPagination(e) {
         currentValue = 1
     }
     const paginatonHtml = `
-                        <li class=" page-item"><a class="page-link page-previous" data-value="${currentValue - 1}" href="#">Previous</a></li>
+                        <li class=" page-item"><i data-value="${currentValue - 1}" class="page-link page-previous fa-solid fa-angle-left"></i></li>
                         <li class="page-item page-item-cd  ${currentValue === lastPage ? 'page-item__points' : 'hidden'}"><a class="page-link" data-value="1" href="#">${currentValue === lastPage ? '1' : ''}</a></li>
                         <li class="page-item ${currentValue === 1 ? 'hidden' : ''}"><a class="page-link" data-value="${currentValue - 1}" href="#">${currentValue - 1}</a></li>
                         <li class="page-item"><a class="page-link page__link--active" data-value="${currentValue}" href="#">${currentValue}</a></li>
                         <li class="page-item ${currentValue === beforeLastPage ? '' : 'page-item__points'} ${currentValue !== lastPage ? currentValue + 1 : 'hidden'}"><a class="page-link" data-value="${currentValue + 1}" href="#">${currentValue + 1}</a></li>
                         <li class="page-item page-item-cd"><a class="page-link" data-value="13" href="#">${currentValue >= beforeLastPage ? '' : lastPage}</a></li>
-                        <li class="page-item"><a class="page-link page-next" data-value="${currentValue + 1}" href="#">Next</a></li>
+                        <li class="page-item"><i data-value="${currentValue + 1}" class="page-link page-next fa-solid fa-angle-right"></i></li>
         `
     paginationList.innerHTML = paginatonHtml
     document.querySelector(`[data-value="${currentValue}"]`).classList.add('page__link--active')
-    paginationNode = document.querySelectorAll('.page-link')
-    paginationNode.forEach((item) => item.addEventListener('click', e => renderPagination(e)))
     clearMovie()
     renderPreloader()
     !e ? getMovies(TOP_URL1 + 1) : getMovies(TOP_URL1 + currentValue)
@@ -89,9 +101,9 @@ function renderMovies(movies) {
         const movie = document.createElement('div')
         movie.classList.add('main__movie')
         movie.innerHTML = `
-            <img class="movie__img" src="${element.posterUrl}" alt="banner">
+            <img data-value='${element.filmId}' class="movie__img" src="${element.posterUrl}" alt="banner">
             <div class="main__movie-bottom">
-                <div class="main__movie-title title">
+                <div data-value='${element.filmId}' class="main__movie-title title">
                     ${element.nameRu}
                 </div>
                 <p class="main__movie-type">${element.genres.map((genre) => ` ${genre.genre}`)}</p>
@@ -127,6 +139,7 @@ function renderModal(movie) {
     console.log(movie);
     const modalHtml = `
                     <div class="modal__card ">
+                        <i class="fa-solid fa-xmark modal__movie-close-icon"></i>
                         <img class="modal__movie-backdrop" src="${movie.posterUrl}" alt="">
                         <h2>
                             <span class="modal__movie-title">${movie.nameRu}</span>
