@@ -393,7 +393,6 @@ ul li {
 @media (max-width: 768px)  {
     .stop-scrolling {
         height: 100%;
-        position: fixed;
         width: 100%;
     }
     .main__movies{
@@ -416,6 +415,7 @@ ul li {
     .modal__card{
         height: 100%;
         margin-top: 40px;
+        overflow-y: scroll;
     }
     .page-item {
         margin-right: 20px;
