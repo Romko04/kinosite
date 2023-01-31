@@ -328,12 +328,6 @@ body {
     flex-direction: column;
     position: relative;
 }
-@media (max-width: 768px)  {
-    .stop-scrolling {
-        height: 100%;
-        position: fixed;
-    }
-}
 .modal__movie-backdrop {
     width: 200px;
     margin: 0 auto;
@@ -393,4 +387,39 @@ ul li {
     background-color: #182531;
     
 
+}
+/* Адаптация под тел*/
+@media (max-width: 768px)  {
+    .stop-scrolling {
+        height: 100%;
+        position: fixed;
+    }
+    .main__movies{
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+    }
+    .main__movie{
+        width: 300px;
+    }
+    .movie__img {
+        width: 300px;
+        height: 400px;
+    }
+    .main__movie-bottom {
+        margin: 10px 0;
+    
+    }
+    .modal__card{
+        height: 100%;
+        margin-top: 40px;
+    }
+    .page-item {
+        margin-right: 20px;
+        font-size: 35px;
+    }
+    .fa-angle-left, .fa-angle-right{
+        font-size: 30px;
+    }
 }
