@@ -360,10 +360,10 @@ body {
 .modal__movie-close-icon{
     font-size: 30px;
     position: absolute;
-    top: 10px;
+    top: 20px;
     color: #fff;
     cursor: pointer;
-    right: 15px;
+    right: 55px;
 }
 
 ul li {
