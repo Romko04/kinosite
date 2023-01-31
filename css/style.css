@@ -297,7 +297,6 @@ body {
 .hidden {
     display: none;
 }
-
 /*----------------------------------modal------------------------------------*/
 .modal {
     display: none;
@@ -358,12 +357,11 @@ body {
     color: #ffd80e
 }
 .modal__movie-close-icon{
-    font-size: 30px;
+    font-size: 49px;
     position: absolute;
-    top: 10px;
-    color: #fff;
+    right: 25px;
+    top: 5px;
     cursor: pointer;
-    right: 15px;
 }
 
 ul li {
@@ -393,6 +391,7 @@ ul li {
     .stop-scrolling {
         height: 100%;
         position: fixed;
+        width: 100%;
     }
     .main__movies{
         flex-direction: column;
