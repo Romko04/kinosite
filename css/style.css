@@ -359,9 +359,10 @@ body {
 .modal__movie-close-icon{
     font-size: 49px;
     position: absolute;
-    right: 25px;
-    top: 5px;
+    top: 10px;
+    color: #fff;
     cursor: pointer;
+    right: 15px;
 }
 
 ul li {
